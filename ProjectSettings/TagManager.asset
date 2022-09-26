@@ -6,6 +6,12 @@ TagManager:
   tags:
   - CityWall
   - Cannon
+  - Organic
+  - Plastic
+  - Metal
+  - OrganicTrash
+  - PlasticTrash
+  - MetallicTrash
   layers:
   - Default
   - TransparentFX
