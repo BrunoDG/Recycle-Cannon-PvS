@@ -5,7 +5,6 @@ public class Bullet : MonoBehaviour
 {
     public float speed = 5f;
     public GameObject impactEffect;
-    public string bulletType;
     private Transform target;
     private Vector3 direction;
 
@@ -47,7 +46,7 @@ public class Bullet : MonoBehaviour
             col.gameObject.tag == "Plastic" ||
             col.gameObject.tag == "Metallic" )
         {
-            Damage(target, bulletType);
+            Damage(target, gameObject.tag);
         }
     }
 

@@ -47,22 +47,24 @@ public class CannonControl : MonoBehaviour
     {
         if (joystick.Horizontal >= .2f)
         {
-            horizontalInput = _cannonSpeed;
+            Quaternion rot = Quaternion.AngleAxis(2, Vector3.up);
+            if (transform.rotation.y < 45f)
+            {
+                transform.Rotate(rot.eulerAngles);
+            }
         }
         else if (joystick.Horizontal <= -.2f)
         {
-            horizontalInput = -_cannonSpeed;
+            Quaternion rot = Quaternion.AngleAxis(-2, Vector3.up);
+            if (transform.rotation.y > -45f)
+            {
+                transform.Rotate(rot.eulerAngles);
+            }
         }
         else
         {
-            horizontalInput = shotDirection.x;
+            horizontalInput = 0f;
         }
-
-        Vector3 movementInput = new Vector3(horizontalInput, 0, 0);
-        Vector3 movementDirection = movementInput.normalized;
-        Quaternion lookRotation = Quaternion.LookRotation(movementDirection, Vector3.up);
-        Vector3 rotation = Quaternion.Lerp(rotationPart.rotation, lookRotation, Time.deltaTime * _cannonSpeed).eulerAngles;
-        rotationPart.rotation = Quaternion.Euler(0f, rotation.y, 0f);
 
         fireCountdown -= Time.deltaTime;
     }
@@ -83,9 +85,9 @@ public class CannonControl : MonoBehaviour
                     bulletPrefab.GetComponent<Renderer>().material = (Material)Instantiate(Metal);
                     break;
             }
+            bulletPrefab.tag = PlayerStats.AmmoType;
             GameObject bulletGO = (GameObject)Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
             Bullet bullet = bulletGO.GetComponent<Bullet>();
-            bullet.bulletType = PlayerStats.AmmoType;
             shotDirection = target.position;
             if (bullet != null)
             {

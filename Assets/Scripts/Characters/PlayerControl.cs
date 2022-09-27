@@ -96,16 +96,16 @@ public class PlayerControl : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "OrganicTrash" ||
-            other.gameObject.tag == "PlasticTrash" ||
-            other.gameObject.tag == "MetallicTrash" )
+        if (other.gameObject.tag == "Organic" ||
+            other.gameObject.tag == "Plastic" ||
+            other.gameObject.tag == "Metallic" )
         {
             Debug.Log("Lixo pode ser coletado!");
             pickItem = true;
         }
-        else if (other.gameObject.tag == "OrganicContainer" ||
-                 other.gameObject.tag == "PlasticContainer" ||
-                 other.gameObject.tag == "MetallicContainer" )
+        else if (other.gameObject.name == "OrganicContainer" ||
+                 other.gameObject.name == "PlasticContainer" ||
+                 other.gameObject.name == "MetallicContainer" )
         {
             Debug.Log("Pode depositar para munição!");
         }
