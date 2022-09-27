@@ -12,9 +12,6 @@ public class WallResistance : MonoBehaviour
     [Header("Unity Stuff")]
     public Image healthBar;
 
-    public 
-
-    // Start is called before the first frame update
     void Start()
     {
         health = startHealth;
@@ -38,7 +35,6 @@ public class WallResistance : MonoBehaviour
     void Explode()
     {
         Destroy(gameObject);
-        GameManager.GameOver(1);
     }
 
     // Update is called once per frame

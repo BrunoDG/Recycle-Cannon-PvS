@@ -383,7 +383,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   joystick: {fileID: 0}
   rotationPart: {fileID: 1500816954545180481}
+  cannonShoot: {fileID: 0}
   _cannonSpeed: 1
-  metalAmmo: 0
-  plasticAmmo: 0
-  organicAmmo: 0

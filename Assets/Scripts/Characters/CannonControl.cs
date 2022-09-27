@@ -14,18 +14,10 @@ public class CannonControl : MonoBehaviour
 
     [SerializeField] private float _cannonSpeed = 1f;
 
-    [Header("Munição do Canhão")]
-    [SerializeField] private int metalAmmo;
-    [SerializeField] private int plasticAmmo;
-    [SerializeField] private int organicAmmo;
-
     private void Start()
     {
         _cannonControl = GetComponent<CharacterController>();
         cannonShoot.onClick.AddListener(Shoot);
-        metalAmmo = 0;
-        plasticAmmo = 0;
-        organicAmmo = 0;
     }
 
     private void Update()
@@ -59,10 +51,4 @@ public class CannonControl : MonoBehaviour
     {
         Debug.Log("SHOT IN THE DARK");
     }
-
-    public void LoadAmmo(int ammo, string type)
-    {
-
-    }
-
 }

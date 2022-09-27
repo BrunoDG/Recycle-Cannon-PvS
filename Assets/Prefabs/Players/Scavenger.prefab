@@ -117,9 +117,12 @@ MonoBehaviour:
   joystick: {fileID: 0}
   _playerSpeed: 40
   _rotationSpeed: 10
-  organicAmmo: 0
-  metalAmmo: 0
-  plasticAmmo: 0
+  pickOrDeposit: {fileID: 0}
+  lives: 0
+  organicFuel: 0
+  metalFuel: 0
+  plasticFuel: 0
+  totalFuel: 0
 --- !u!143 &5403421478654409996
 CharacterController:
   m_ObjectHideFlags: 0

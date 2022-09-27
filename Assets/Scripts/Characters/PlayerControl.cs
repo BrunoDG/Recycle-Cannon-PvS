@@ -1,8 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerControl : MonoBehaviour
 {
@@ -17,7 +16,9 @@ public class PlayerControl : MonoBehaviour
 
     private float horizontalInput;
     private float verticalInput;
+    public Button pickOrDeposit;
     private bool pickItem = false;
+    private bool actionPressed = false;
 
     [Header("Life counter")]
     public int lives;
@@ -25,15 +26,18 @@ public class PlayerControl : MonoBehaviour
     private List<GameObject> lifePanels = new List<GameObject>();
 
     [Header("Trash Collected")]
-    [SerializeField] private int organicAmmo;
-    [SerializeField] private int metalAmmo;
-    [SerializeField] private int plasticAmmo;
+    [SerializeField] private int organicFuel;
+    [SerializeField] private int metalFuel;
+    [SerializeField] private int plasticFuel;
+    [SerializeField] private int totalFuel;
 
     private void Start()
     {
         _controller = GetComponent<CharacterController>();
         lifePanels.AddRange(GameObject.FindGameObjectsWithTag("LifeScavenger"));
-        lives = lifePanels.Count();
+        PlayerStats.Lives = lifePanels.Count();
+        pickOrDeposit.onClick.AddListener(PickOrDepositTapped);
+        totalFuel = 0;
     }
 
     private void Update()
@@ -43,9 +47,9 @@ public class PlayerControl : MonoBehaviour
 
     public void TakeDamage()
     {
-        lives--;
-        Destroy(lifePanels[lives-1]);
-        if (lives == 0)
+        PlayerStats.Lives--;
+        Destroy(lifePanels[PlayerStats.Lives-1]);
+        if (PlayerStats.Lives <= 0)
         {
             Die();
         }
@@ -107,47 +111,91 @@ public class PlayerControl : MonoBehaviour
         }
     }
 
-    void OnTriggerStay(Collider other)
+    void PickOrDepositTapped()
     {
-        
-        PickAndDeposit(other.gameObject.tag, "Pick");
-        other.gameObject.SetActive(false);
-        Destroy(other.gameObject);
+        actionPressed = true;
     }
 
-    void PickAndDeposit(string type, string action)
+    void OnTriggerStay(Collider other)
+    {    
+        if(actionPressed)
+        {
+            PickAndDeposit(other.gameObject.tag, "Pick", other);
+            return;
+        }
+    }
+
+    void PickAndDeposit(string type, string action, Collider other)
     {
+        if (action == "Pick" && totalFuel == 6)
+        {
+            Debug.Log("Can't pick any more fuel, you need to unload first!");
+            return;
+        }
+
         switch (type)
         {
             case "OrganicTrash":
                 if (pickItem)
                 {
                     Debug.Log("Organic Trash Collected");
-                    organicAmmo++;
+                    organicFuel++;
+                    totalFuel++;
+                    other.gameObject.SetActive(false);
+                    Destroy(other.gameObject);
                 } else
                 {
                     Debug.Log("Organic Trash Fueled on the Right Place");
-                    
-                    organicAmmo = 0;
+                    PlayerStats.OrganicAmmo = organicFuel;
+                    totalFuel -= organicFuel;
+                    organicFuel = 0;
                 }
                 break;
             case "PlasticTrash":
                 if (pickItem)
                 {
                     Debug.Log("Plastic Trash Collected");
-                    plasticAmmo++;
+                    plasticFuel++;
+                    totalFuel++;
+                    other.gameObject.SetActive(false);
+                    Destroy(other.gameObject);
+                } else
+                {
+                    Debug.Log("Plastic Trash Fueled on the Right Place");
+                    PlayerStats.PlasticAmmo = plasticFuel;
+                    totalFuel -= plasticFuel;
+                    plasticFuel = 0;
                 }
                 break;
             case "MetallicTrash":
-                Debug.Log("Metallic Trash Collected");
-                metalAmmo++;
+                if (pickItem)
+                {
+                    Debug.Log("Metallic Trash Collected");
+                    metalFuel++; 
+                    totalFuel++;
+                    other.gameObject.SetActive(false);
+                    Destroy(other.gameObject);
+                } else
+                {
+                    Debug.Log("Metallic Trash Fueled on the Right Place");
+                    PlayerStats.MetallicAmmo = metalFuel;
+                    totalFuel -= metalFuel;
+                    metalFuel = 0;
+                }
                 break;
+        }
+
+        actionPressed = false;
+
+        if (totalFuel == 6)
+        {
+            Debug.Log("You're full! Unload all trash on a container to pick more fuel!");
+            return;
         }
     }
 
     void Die()
     {
         Destroy(gameObject);
-        GameManager.GameOver(0);
     }
 }
