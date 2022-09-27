@@ -39,12 +39,12 @@ public class Bullet : MonoBehaviour
         }
     }
 
-    void OnCollisionEnter(Collision col)
+    void OnTriggerEnter(Collider col)
     {
         target = col.transform;
         if (col.gameObject.tag == "Organic" ||
             col.gameObject.tag == "Plastic" ||
-            col.gameObject.tag == "Metallic" )
+            col.gameObject.tag == "Metal" )
         {
             Damage(target, gameObject.tag);
         }
@@ -57,14 +57,14 @@ public class Bullet : MonoBehaviour
         if (al != null)
         {
             if (
-                (al.tag == "Metallic" || 
+                (al.tag == "Metal" || 
                  al.tag == "Plastic" ) && 
                  PlayerStats.AmmoType == "Organic")
             {
                 al.TakeDamage(1f);
                 return;
             } else if (al.tag == "Organic" && (
-                    PlayerStats.AmmoType == "Metallic" ||
+                    PlayerStats.AmmoType == "Metal" ||
                     PlayerStats.AmmoType == "Plastic")
                 )
             {

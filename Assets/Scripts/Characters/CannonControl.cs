@@ -19,16 +19,12 @@ public class CannonControl : MonoBehaviour
     public Material Plastic;
     public Material Metal;
 
-    private float horizontalInput;
-
     [Header("Unity Setup Fields")]
     public Transform rotationPart;
     public Transform target;
     private Vector3 shotDirection;
 
     public GameObject bulletPrefab;
-    
-    [SerializeField] private float _cannonSpeed = 1f;
 
     public Transform firePoint;
 
@@ -48,22 +44,12 @@ public class CannonControl : MonoBehaviour
         if (joystick.Horizontal >= .2f)
         {
             Quaternion rot = Quaternion.AngleAxis(2, Vector3.up);
-            if (transform.rotation.y < 45f)
-            {
-                transform.Rotate(rot.eulerAngles);
-            }
+            transform.Rotate(rot.eulerAngles);
         }
         else if (joystick.Horizontal <= -.2f)
         {
             Quaternion rot = Quaternion.AngleAxis(-2, Vector3.up);
-            if (transform.rotation.y > -45f)
-            {
-                transform.Rotate(rot.eulerAngles);
-            }
-        }
-        else
-        {
-            horizontalInput = 0f;
+            transform.Rotate(rot.eulerAngles);
         }
 
         fireCountdown -= Time.deltaTime;
@@ -81,7 +67,7 @@ public class CannonControl : MonoBehaviour
                 case "Plastic":
                     bulletPrefab.GetComponent<Renderer>().material = (Material)Instantiate(Plastic);
                     break;
-                case "Metallic":
+                case "Metal":
                     bulletPrefab.GetComponent<Renderer>().material = (Material)Instantiate(Metal);
                     break;
             }

@@ -9,14 +9,12 @@ TagManager:
   - Organic
   - Plastic
   - Metal
-  - OrganicTrash
-  - PlasticTrash
-  - MetallicTrash
   - WaveSpawner
   - Waypoint
   - LifeScavenger
   - FIreTarget
   - Bullet
+  - Container
   layers:
   - Default
   - TransparentFX

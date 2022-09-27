@@ -23,19 +23,15 @@ public class PlayerControl : MonoBehaviour
     [Header("Life counter")]
     public int lives;
 
-    private List<GameObject> lifePanels = new List<GameObject>();
+    private List<GameObject> containers = new List<GameObject>();
 
     [Header("Trash Collected")]
-    [SerializeField] private int organicFuel;
-    [SerializeField] private int metalFuel;
-    [SerializeField] private int plasticFuel;
+    [SerializeField] private string fuelType = "";
     [SerializeField] private int totalFuel;
 
     private void Start()
     {
         _controller = GetComponent<CharacterController>();
-        lifePanels.AddRange(GameObject.FindGameObjectsWithTag("LifeScavenger"));
-        PlayerStats.Lives = lifePanels.Count();
         pickOrDeposit.onClick.AddListener(PickOrDepositTapped);
         totalFuel = 0;
     }
@@ -47,11 +43,16 @@ public class PlayerControl : MonoBehaviour
 
     public void TakeDamage()
     {
+        LevelUI life = GetComponent<LevelUI>();
+
         PlayerStats.Lives--;
-        Destroy(lifePanels[PlayerStats.Lives-1]);
+        life.DamagePlayer(1);
         if (PlayerStats.Lives <= 0)
         {
             Die();
+        } else
+        {
+            transform.position = Vector3.MoveTowards(transform.position, transform.position + new Vector3(5f, 0, 5f), _playerSpeed * Time.deltaTime);
         }
     }
 
@@ -133,85 +134,38 @@ public class PlayerControl : MonoBehaviour
             return;
         }
 
-        switch (type)
+
+        if(pickItem)
         {
-            case "OrganicTrash":
-                if (pickItem)
-                {
-                    if (plasticFuel==0 && metalFuel==0)
-                    {
-                        Debug.Log("Organic Trash Collected");
-                        organicFuel++;
-                        totalFuel++;
-                        other.gameObject.SetActive(false);
-                        Destroy(other.gameObject);
-                    } else
-                    {
-                        Debug.Log("Não pode coletar tipos de lixo diferentes, só um por vez!");
-                        return;
-                    }
-                } else
-                {
-                    Debug.Log("Organic Trash Fueled on the Right Place");
-                    PlayerStats.AmmoType = "Organic";
-                    PlayerStats.TotalAmmo = organicFuel;
-                    totalFuel -= organicFuel;
-                    organicFuel = 0;
-                }
-                break;
-            case "PlasticTrash":
-                if (pickItem)
-                {
-                    if (organicFuel == 0 && metalFuel == 0)
-                    {
-                        Debug.Log("Plastic Trash Collected");
-                        plasticFuel++;
-                        totalFuel++;
-                        other.gameObject.SetActive(false);
-                        Destroy(other.gameObject);
-                    } else
-                    {
-                        Debug.Log("Não pode coletar tipos de lixo diferentes, só um por vez!");
-                        return;
-                    }
-                } else
-                {
-                    Debug.Log("Plastic Trash Fueled on the Right Place");
-                    PlayerStats.AmmoType = "Plastic";
-                    PlayerStats.TotalAmmo = plasticFuel;
-                    totalFuel -= plasticFuel;
-                    plasticFuel = 0;
-                }
-                break;
-            case "MetallicTrash":
-                if (pickItem)
-                {
-                    if (plasticFuel == 0 && organicFuel == 0)
-                    {
-                        Debug.Log("Metallic Trash Collected");
-                        metalFuel++;
-                        totalFuel++;
-                        other.gameObject.SetActive(false);
-                        Destroy(other.gameObject);
-                    }else
-                    {
-                        Debug.Log("Não pode coletar tipos de lixo diferentes, só um por vez!");
-                        return;
-                    }
-                } else
-                {
-                    Debug.Log("Metallic Trash Fueled on the Right Place");
-                    PlayerStats.AmmoType = "Metallic";
-                    PlayerStats.TotalAmmo = metalFuel;
-                    totalFuel -= metalFuel;
-                    metalFuel = 0;
-                }
-                break;
+            if (fuelType == "")
+            {
+                fuelType = type;
+            }
+
+            if (type.Equals(fuelType))
+            {
+                Debug.Log($"{fuelType} Trash Collected");
+                totalFuel++;
+                other.gameObject.SetActive(false);
+                Destroy(other.gameObject);
+            } else
+            {
+                Debug.Log("Não pode coletar tipos de lixo diferentes, só um por vez!");
+                return;
+            }
+        } else
+        {
+
+            Debug.Log($"{fuelType} Trash Fueled on the Right Place");
+            PlayerStats.AmmoType = "Organic";
+            PlayerStats.TotalAmmo = totalFuel;
+            totalFuel = 0;
+            fuelType = "";
         }
 
         actionPressed = false;
 
-        if (totalFuel == 6)
+        if (totalFuel == 5)
         {
             Debug.Log("You're full! Unload all trash on a container to pick more fuel!");
             return;

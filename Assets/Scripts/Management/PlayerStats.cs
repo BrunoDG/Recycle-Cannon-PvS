@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerStats : MonoBehaviour
 {
     public static string AmmoType;
-    public string startAmmoType = "Metallic";
+    public string startAmmoType = "Metal";
 
     public static int TotalAmmo;
     public int startTotalAmmo = 5;
@@ -18,10 +18,9 @@ public class PlayerStats : MonoBehaviour
 
     void Start()
     {
-        AmmoType = startAmmoType;
+        AmmoType = "Metal";
         TotalAmmo = startTotalAmmo;
         Lives = startLives;
         WallHealth = startWallHealth;
     }
-
 }

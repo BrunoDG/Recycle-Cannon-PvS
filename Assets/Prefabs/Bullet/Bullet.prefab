@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 5738361838033660498}
   m_Layer: 0
   m_Name: Bullet
-  m_TagString: Untagged
+  m_TagString: Metal
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 40dd07d2febf91a44834d835ca2375e0, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -93,7 +93,7 @@ SphereCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 486256468754012767}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
@@ -112,4 +112,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 70
   impactEffect: {fileID: 8973381222830432342, guid: a862bba2b3b603644b381cce7eb7d61e, type: 3}
-  bulletType: 

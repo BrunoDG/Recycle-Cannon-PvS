@@ -6,21 +6,21 @@ public class WallResistance : MonoBehaviour
 {
     private float startHealth = 20f;
 
+    private LevelUI life;
+
     [SerializeField]
     public float health;
 
-    [Header("Unity Stuff")]
-    public Image healthBar;
-
     void Start()
     {
+        life = GetComponent<LevelUI>();
         health = startHealth;
     }
     public void TakeDamage(float amount)
     {
+        life.DamageWall(amount);
         health -= amount;
-        healthBar.fillAmount = health / startHealth;
-
+        
         if (health <= 0)
         {
             Explode();
@@ -30,15 +30,11 @@ public class WallResistance : MonoBehaviour
     void EndTurn()
     {
         health += 10f;
+        life.DamageWall(-10f);
     }
 
     void Explode()
     {
         Destroy(gameObject);
-    }
-
-    void Update()
-    {
-        
     }
 }

@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviour
         if (gameEnded)
             return;
 
-        if (PlayerStats.Lives <= 0)
+        if (PlayerStats.Lives <= 0 || PlayerStats.WallHealth <= 0)
         {
             EndGame();
         }
@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour
     {
         gameEnded = true;
         Debug.Log("Game Over");
-        SceneManager.LoadScene("MainMenu");
+        //SceneManager.LoadScene("MainMenu");
         return;
     }
 }
