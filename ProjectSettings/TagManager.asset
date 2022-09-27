@@ -15,6 +15,7 @@ TagManager:
   - FIreTarget
   - Bullet
   - Container
+  - Boss
   layers:
   - Default
   - TransparentFX

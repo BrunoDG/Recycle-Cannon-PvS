@@ -9,26 +9,41 @@ public class Alien : MonoBehaviour
 
     [Header("Enemy Properties")]
     public float startSpeed = 10f;
+    public float startBossHealth = 20f;
     public float startHealth = 3f;
-    public int worth = 5;
+    public float enemyWorth;
     public float health;
+    public string enemyType;
 
     [Header("Droppables")]
     public GameObject[] trashObject;
 
-
     private float countdown;
     private bool hitWall = false;
+    private bool isBoss = false;
 
 
     [Header("Unity Stuff")]
     public Image healthBar;
 
+
+    public void SetStageBoss(bool boss)
+    {
+        isBoss = boss;
+    }
+
     void Start()
     {
         speed = startSpeed;
-        health = startHealth;
         countdown = 1f;
+
+        if (isBoss) {
+            health = startBossHealth;
+        } else
+        {
+            health = startHealth;
+        }
+        enemyWorth = health;
     }
 
     void Update()
@@ -79,7 +94,6 @@ public class Alien : MonoBehaviour
 
     void DamageWall(float damage)
     {
-        
         PlayerStats.WallHealth -= damage;
     }
 
@@ -90,9 +104,18 @@ public class Alien : MonoBehaviour
 
     void Die()
     {
-        Destroy(transform.gameObject);
+        LevelUI lvl = GetComponent<LevelUI>();
+        if (enemyType == "Boss")
+        {
+            lvl.level++;
+        } else
+        {
+            WaveSpawner.spawnCount--;
+            lvl.waveSpawnCount = WaveSpawner.spawnCount;
+        }
 
-        WaveSpawner.spawnCount--;
+        DropItems();
+        Destroy(transform.gameObject);
         return;
     }
 

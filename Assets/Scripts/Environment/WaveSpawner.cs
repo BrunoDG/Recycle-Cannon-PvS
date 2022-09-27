@@ -1,15 +1,17 @@
 using UnityEngine;
 
 using System.Collections;
-using System.Threading;
 
 public class WaveSpawner : MonoBehaviour
 {
+    [Header("Enemy spawner properties")]
     public Transform enemyPrefab;
-    private GameObject[] waveSpawners;
-    public Material Organic, Plastic, Metal;
+    public Transform bossPrefab;
+    public Material Organic, Plastic, Metal, Boss;
 
-    // Waves countdown 
+    private GameObject[] waveSpawners;
+
+    [Header("Waves countdown")]
     public float waveCountdown = 10f;
     private float countdown = 5f;
     private int waveIndex = 1;
@@ -41,17 +43,24 @@ public class WaveSpawner : MonoBehaviour
 
     IEnumerator SpawnWave()
     {
-        spawnCount = waveIndex * 5;
-        foreach (GameObject waver in waveSpawners)
+        if (waveIndex < 5)
         {
-            for (int i = 0; i < waveIndex; i++)
+            spawnCount = waveIndex * 5;
+            foreach (GameObject waver in waveSpawners)
             {
-                int enemyType = GetRandomInt(0, 1000) % 5;
-                SpawnEnemy(enemyType, waver.transform);
-                yield return new WaitForSeconds(0.5f);
+                for (int i = 0; i < waveIndex; i++)
+                {
+                    int enemyType = GetRandomInt(0, 1000) % 5;
+                    SpawnEnemy(enemyType, waver.transform);
+                    yield return new WaitForSeconds(0.5f);
+                }
             }
+            waveIndex++;
+        } else
+        {
+            SpawnBoss(waveSpawners[0].transform);
+            waveIndex = 0;
         }
-        waveIndex++;
     }
 
     void SpawnEnemy(int enemyType, Transform spawnPoint)
@@ -71,6 +80,12 @@ public class WaveSpawner : MonoBehaviour
             alien.tag = "Metal";
         }
 
+    }
+
+    public void SpawnBoss(Transform spawnPoint)
+    {
+        GameObject boss = Instantiate(bossPrefab, spawnPoint.position, spawnPoint.rotation).gameObject;
+        boss.tag = "Boss";
     }
 
     public int GetRandomInt(int min, int max)

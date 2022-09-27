@@ -19,7 +19,7 @@ public class Bullet : MonoBehaviour
         Vector3 dir = direction - transform.position;
         float distanceThisFrame = speed * Time.deltaTime;
 
-        if (dir.magnitude <= distanceThisFrame)
+        if (dir.magnitude <= distanceThisFrame && target != null)
         {
             HitTarget();
             return;
@@ -57,8 +57,8 @@ public class Bullet : MonoBehaviour
         if (al != null)
         {
             if (
-                (al.tag == "Metal" || 
-                 al.tag == "Plastic" ) && 
+                (al.tag == "Metal" ||
+                 al.tag == "Plastic") &&
                  PlayerStats.AmmoType == "Organic")
             {
                 al.TakeDamage(1f);
@@ -70,6 +70,8 @@ public class Bullet : MonoBehaviour
             {
                 al.TakeDamage(1f);
                 return;
+            } else if (al.tag == "Boss") {
+                al.TakeDamage(1f);
             } else
             {
                 return;

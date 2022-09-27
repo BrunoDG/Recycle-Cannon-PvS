@@ -119,9 +119,7 @@ MonoBehaviour:
   _rotationSpeed: 10
   pickOrDeposit: {fileID: 0}
   lives: 0
-  organicFuel: 0
-  metalFuel: 0
-  plasticFuel: 0
+  fuelType: 
   totalFuel: 0
 --- !u!143 &5403421478654409996
 CharacterController:
@@ -170,7 +168,7 @@ GameObject:
   - component: {fileID: 5403421479189218921}
   - component: {fileID: 5403421479189218922}
   m_Layer: 0
-  m_Name: Capsule
+  m_Name: Goggle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -219,7 +217,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: baca9d6784f8daf4589ebb4b7925036c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

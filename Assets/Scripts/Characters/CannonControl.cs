@@ -52,36 +52,52 @@ public class CannonControl : MonoBehaviour
             transform.Rotate(rot.eulerAngles);
         }
 
-        fireCountdown -= Time.deltaTime;
+        if (fireCountdown > 0f)
+        {
+            fireCountdown -= Time.deltaTime;
+        }
     }
 
     void Shoot()
     {
-        if (fireCountdown <= 0f)
+        if (PlayerStats.TotalAmmo < 3)
         {
-            switch(PlayerStats.AmmoType)
+            Debug.LogError("Sem munição! Colete mais lixo para poder atirar!");
+        }
+        if (fireCountdown <= 0f && PlayerStats.TotalAmmo <= 5 && PlayerStats.TotalAmmo >= 3)
+        {
+            for (int i = 0; i < PlayerStats.TotalAmmo; i++)
             {
-                case "Organic":
-                    bulletPrefab.GetComponent<Renderer>().material = (Material)Instantiate(Organic);
-                    break;
-                case "Plastic":
-                    bulletPrefab.GetComponent<Renderer>().material = (Material)Instantiate(Plastic);
-                    break;
-                case "Metal":
-                    bulletPrefab.GetComponent<Renderer>().material = (Material)Instantiate(Metal);
-                    break;
+                StartCoroutine(SpawnBullet());
             }
-            bulletPrefab.tag = PlayerStats.AmmoType;
-            GameObject bulletGO = (GameObject)Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
-            Bullet bullet = bulletGO.GetComponent<Bullet>();
-            shotDirection = target.position;
-            if (bullet != null)
-            {
-                bullet.Seek(shotDirection, target);
-            }
-            PlayerStats.TotalAmmo--;
+            PlayerStats.TotalAmmo = 0;
             
             fireCountdown = 1f / fireRate;
         }
+    }
+
+    IEnumerator SpawnBullet()
+    {
+        switch (PlayerStats.AmmoType)
+        {
+            case "Organic":
+                bulletPrefab.GetComponent<Renderer>().material = (Material)Instantiate(Organic);
+                break;
+            case "Plastic":
+                bulletPrefab.GetComponent<Renderer>().material = (Material)Instantiate(Plastic);
+                break;
+            case "Metal":
+                bulletPrefab.GetComponent<Renderer>().material = (Material)Instantiate(Metal);
+                break;
+        }
+        bulletPrefab.tag = PlayerStats.AmmoType;
+        GameObject bulletGO = (GameObject)Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+        Bullet bullet = bulletGO.GetComponent<Bullet>();
+        shotDirection = target.position;
+        if (bullet != null)
+        {
+            bullet.Seek(shotDirection, target);
+        }
+        yield return new WaitForSeconds(0.2f);
     }
 }

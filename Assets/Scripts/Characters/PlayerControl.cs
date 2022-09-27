@@ -6,6 +6,8 @@ using UnityEngine.UI;
 public class PlayerControl : MonoBehaviour
 {
     private CharacterController _controller;
+    
+    [Header("Player Controller")]
     public Joystick joystick;
 
     [SerializeField]
@@ -16,21 +18,27 @@ public class PlayerControl : MonoBehaviour
 
     private float horizontalInput;
     private float verticalInput;
-    public Button pickOrDeposit;
     private bool pickItem = false;
     private bool actionPressed = false;
+
+    private GameObject characterGoggle;
 
     [Header("Life counter")]
     public int lives;
 
+    [Header("Character Skins")]
+    public List<Material> skins = new List<Material>();
+
     private List<GameObject> containers = new List<GameObject>();
 
-    [Header("Trash Collected")]
+    [Header("Trash")]
     [SerializeField] private string fuelType = "";
     [SerializeField] private int totalFuel;
+    public Button pickOrDeposit;
 
     private void Start()
     {
+        GameObject.Find("Goggle");
         _controller = GetComponent<CharacterController>();
         pickOrDeposit.onClick.AddListener(PickOrDepositTapped);
         totalFuel = 0;
@@ -148,6 +156,7 @@ public class PlayerControl : MonoBehaviour
                 totalFuel++;
                 other.gameObject.SetActive(false);
                 Destroy(other.gameObject);
+                pickItem = false;
             } else
             {
                 Debug.Log("Não pode coletar tipos de lixo diferentes, só um por vez!");
@@ -155,12 +164,19 @@ public class PlayerControl : MonoBehaviour
             }
         } else
         {
+            if (fuelType != type)
+            {
+                Debug.Log("Depósito no local errado! Vá para o container correto!");
+                return;
+            } else
+            {
+                Debug.Log($"{fuelType} Trash Fueled on the Right Place");
+                PlayerStats.AmmoType = "Organic";
+                PlayerStats.TotalAmmo = totalFuel;
+                totalFuel = 0;
+                fuelType = "";
 
-            Debug.Log($"{fuelType} Trash Fueled on the Right Place");
-            PlayerStats.AmmoType = "Organic";
-            PlayerStats.TotalAmmo = totalFuel;
-            totalFuel = 0;
-            fuelType = "";
+            }
         }
 
         actionPressed = false;
@@ -175,5 +191,10 @@ public class PlayerControl : MonoBehaviour
     void Die()
     {
         Destroy(gameObject);
+    }
+
+    void ChangeSkin()
+    {
+
     }
 }

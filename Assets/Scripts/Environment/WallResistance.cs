@@ -27,7 +27,7 @@ public class WallResistance : MonoBehaviour
         }
     }
 
-    void EndTurn()
+    public void EndTurn()
     {
         health += 10f;
         life.DamageWall(-10f);
