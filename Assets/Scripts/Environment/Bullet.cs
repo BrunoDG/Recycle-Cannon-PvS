@@ -1,27 +1,23 @@
+using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    private Transform target;
-
-    public float speed = 70f;
+    public float speed = 5f;
     public GameObject impactEffect;
+    public string bulletType;
+    private Transform target;
+    private Vector3 direction;
 
-    public void Seek(Transform _target)
+    public void Seek(Vector3 _direction, Transform _target)
     {
+        direction = _direction;
         target = _target;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if (target == null)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        Vector3 dir = target.position - transform.position;
+        Vector3 dir = direction - transform.position;
         float distanceThisFrame = speed * Time.deltaTime;
 
         if (dir.magnitude <= distanceThisFrame)
@@ -35,15 +31,50 @@ public class Bullet : MonoBehaviour
 
     void HitTarget()
     {
-        GameObject effectIns = (GameObject)Instantiate(impactEffect, transform.position, transform.rotation);
-        Destroy(effectIns, 2f);
-
-        Damage(target);
         Destroy(gameObject);
+        
+        if (!target.gameObject.tag.Equals("FireTarget"))
+        {
+            GameObject effectIns = (GameObject)Instantiate(impactEffect, transform.position, transform.rotation);
+            Destroy(effectIns, 2f);
+        }
     }
 
-    void Damage(Transform enemy)
+    void OnCollisionEnter(Collision col)
     {
+        target = col.transform;
+        if (col.gameObject.tag == "Organic" ||
+            col.gameObject.tag == "Plastic" ||
+            col.gameObject.tag == "Metallic" )
+        {
+            Damage(target, bulletType);
+        }
+    }
 
+    void Damage(Transform enemy, string type)
+    {
+        Alien al = enemy.GetComponent<Alien>();
+        
+        if (al != null)
+        {
+            if (
+                (al.tag == "Metallic" || 
+                 al.tag == "Plastic" ) && 
+                 PlayerStats.AmmoType == "Organic")
+            {
+                al.TakeDamage(1f);
+                return;
+            } else if (al.tag == "Organic" && (
+                    PlayerStats.AmmoType == "Metallic" ||
+                    PlayerStats.AmmoType == "Plastic")
+                )
+            {
+                al.TakeDamage(1f);
+                return;
+            } else
+            {
+                return;
+            }
+        }
     }
 }

@@ -4,25 +4,22 @@ using UnityEngine;
 
 public class PlayerStats : MonoBehaviour
 {
-    public static int OrganicAmmo;
-    public static int PlasticAmmo;
-    public static int MetallicAmmo;
+    public static string AmmoType;
+    public string startAmmoType = "Metallic";
 
-    public int startOrganicAmmo = 0;
-    public int startPlasticAmmo = 0;
-    public int startMetallicAmmo = 0;
+    public static int TotalAmmo;
+    public int startTotalAmmo = 5;
 
     public static int Lives;
     public int startLives = 3;
 
-    public static int WallHealth;
-    public int startWallHealth = 20;
+    public static float WallHealth;
+    public float startWallHealth = 20;
 
     void Start()
     {
-        OrganicAmmo = startOrganicAmmo;
-        PlasticAmmo = startPlasticAmmo;
-        MetallicAmmo = startMetallicAmmo;
+        AmmoType = startAmmoType;
+        TotalAmmo = startTotalAmmo;
         Lives = startLives;
         WallHealth = startWallHealth;
     }

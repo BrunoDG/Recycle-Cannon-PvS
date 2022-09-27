@@ -46,7 +46,7 @@ public class WaveSpawner : MonoBehaviour
         {
             for (int i = 0; i < waveIndex; i++)
             {
-                int enemyType = GetRandomInt(0, 1000) % 10;
+                int enemyType = GetRandomInt(0, 1000) % 5;
                 SpawnEnemy(enemyType, waver.transform);
                 yield return new WaitForSeconds(0.5f);
             }
@@ -56,14 +56,21 @@ public class WaveSpawner : MonoBehaviour
 
     void SpawnEnemy(int enemyType, Transform spawnPoint)
     {
-        if (enemyType == 0 || enemyType == 2 || enemyType == 5 || enemyType == 8)
-            enemyPrefab.GetComponent<Renderer>().material = (Material)Instantiate(Organic);
-        if (enemyType == 1 || enemyType == 3 || enemyType == 9)
-            enemyPrefab.GetComponent<Renderer>().material = (Material)Instantiate(Plastic);
-        else
-            enemyPrefab.GetComponent<Renderer>().material = (Material)Instantiate(Metal);
+        GameObject alien = Instantiate(enemyPrefab, spawnPoint.position, spawnPoint.rotation).gameObject;
 
-        Instantiate(enemyPrefab, spawnPoint.position, spawnPoint.rotation);
+        if (enemyType == 0 || enemyType == 2 || enemyType == 4) { 
+            alien.GetComponent<Renderer>().material = (Material)Instantiate(Organic);
+            alien.tag = "Organic";
+        } else if (enemyType == 1)
+        {
+            alien.GetComponent<Renderer>().material = (Material)Instantiate(Plastic);
+            alien.tag = "Plastic";
+        } else
+        {
+            alien.GetComponent<Renderer>().material = (Material)Instantiate(Metal);
+            alien.tag = "Metal";
+        }
+
     }
 
     public int GetRandomInt(int min, int max)

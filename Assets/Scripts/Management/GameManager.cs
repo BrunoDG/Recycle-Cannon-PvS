@@ -1,6 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -8,7 +7,7 @@ public class GameManager : MonoBehaviour
 
     private bool gameEnded = false;
 
-    private void Awake()
+    void Awake()
     {
         if (instance != null)
         {
@@ -18,7 +17,7 @@ public class GameManager : MonoBehaviour
         instance = this;
     }
 
-    private void Update()
+    void Update()
     {
         if (gameEnded)
             return;
@@ -29,10 +28,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void EndGame()
+    void EndGame()
     {
         gameEnded = true;
         Debug.Log("Game Over");
+        SceneManager.LoadScene("MainMenu");
         return;
     }
 }

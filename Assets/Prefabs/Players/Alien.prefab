@@ -236,7 +236,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_Color: {r: 0.05281806, g: 1, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -244,8 +244,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: 0cf37de13fd171b4299f33a8f46ac70d, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -268,6 +268,7 @@ GameObject:
   - component: {fileID: 6717532810707580922}
   - component: {fileID: 7314985359799291934}
   - component: {fileID: 8271142690113487353}
+  - component: {fileID: -2427334254692086480}
   m_Layer: 0
   m_Name: Alien
   m_TagString: Untagged
@@ -383,3 +384,25 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &-2427334254692086480
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7149699204488719410}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22d5f919be9400746b2dd0ab93cae8d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 0
+  startSpeed: 10
+  startHealth: 3
+  worth: 5
+  health: 0
+  trashObject:
+  - {fileID: 2423554226510338416, guid: 744f1db8f5c00f049bab77a34b44c396, type: 3}
+  - {fileID: 300526400804464055, guid: 98c6ceecb4af99b4582de2f4ff9eca46, type: 3}
+  - {fileID: 8494450869785291673, guid: 84ec2baeeb1d12e41914689466510a0e, type: 3}
+  healthBar: {fileID: 3576960858661940691}

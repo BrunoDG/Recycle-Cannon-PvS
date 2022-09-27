@@ -127,9 +127,9 @@ public class PlayerControl : MonoBehaviour
 
     void PickAndDeposit(string type, string action, Collider other)
     {
-        if (action == "Pick" && totalFuel == 6)
+        if (action == "Pick" && totalFuel == 5)
         {
-            Debug.Log("Can't pick any more fuel, you need to unload first!");
+            Debug.Log("Você está cheio, coloque o lixo no container e volte depois!");
             return;
         }
 
@@ -138,15 +138,23 @@ public class PlayerControl : MonoBehaviour
             case "OrganicTrash":
                 if (pickItem)
                 {
-                    Debug.Log("Organic Trash Collected");
-                    organicFuel++;
-                    totalFuel++;
-                    other.gameObject.SetActive(false);
-                    Destroy(other.gameObject);
+                    if (plasticFuel==0 && metalFuel==0)
+                    {
+                        Debug.Log("Organic Trash Collected");
+                        organicFuel++;
+                        totalFuel++;
+                        other.gameObject.SetActive(false);
+                        Destroy(other.gameObject);
+                    } else
+                    {
+                        Debug.Log("Não pode coletar tipos de lixo diferentes, só um por vez!");
+                        return;
+                    }
                 } else
                 {
                     Debug.Log("Organic Trash Fueled on the Right Place");
-                    PlayerStats.OrganicAmmo = organicFuel;
+                    PlayerStats.AmmoType = "Organic";
+                    PlayerStats.TotalAmmo = organicFuel;
                     totalFuel -= organicFuel;
                     organicFuel = 0;
                 }
@@ -154,15 +162,23 @@ public class PlayerControl : MonoBehaviour
             case "PlasticTrash":
                 if (pickItem)
                 {
-                    Debug.Log("Plastic Trash Collected");
-                    plasticFuel++;
-                    totalFuel++;
-                    other.gameObject.SetActive(false);
-                    Destroy(other.gameObject);
+                    if (organicFuel == 0 && metalFuel == 0)
+                    {
+                        Debug.Log("Plastic Trash Collected");
+                        plasticFuel++;
+                        totalFuel++;
+                        other.gameObject.SetActive(false);
+                        Destroy(other.gameObject);
+                    } else
+                    {
+                        Debug.Log("Não pode coletar tipos de lixo diferentes, só um por vez!");
+                        return;
+                    }
                 } else
                 {
                     Debug.Log("Plastic Trash Fueled on the Right Place");
-                    PlayerStats.PlasticAmmo = plasticFuel;
+                    PlayerStats.AmmoType = "Plastic";
+                    PlayerStats.TotalAmmo = plasticFuel;
                     totalFuel -= plasticFuel;
                     plasticFuel = 0;
                 }
@@ -170,15 +186,23 @@ public class PlayerControl : MonoBehaviour
             case "MetallicTrash":
                 if (pickItem)
                 {
-                    Debug.Log("Metallic Trash Collected");
-                    metalFuel++; 
-                    totalFuel++;
-                    other.gameObject.SetActive(false);
-                    Destroy(other.gameObject);
+                    if (plasticFuel == 0 && organicFuel == 0)
+                    {
+                        Debug.Log("Metallic Trash Collected");
+                        metalFuel++;
+                        totalFuel++;
+                        other.gameObject.SetActive(false);
+                        Destroy(other.gameObject);
+                    }else
+                    {
+                        Debug.Log("Não pode coletar tipos de lixo diferentes, só um por vez!");
+                        return;
+                    }
                 } else
                 {
                     Debug.Log("Metallic Trash Fueled on the Right Place");
-                    PlayerStats.MetallicAmmo = metalFuel;
+                    PlayerStats.AmmoType = "Metallic";
+                    PlayerStats.TotalAmmo = metalFuel;
                     totalFuel -= metalFuel;
                     metalFuel = 0;
                 }
