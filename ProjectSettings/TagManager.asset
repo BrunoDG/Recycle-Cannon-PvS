@@ -12,6 +12,9 @@ TagManager:
   - OrganicTrash
   - PlasticTrash
   - MetallicTrash
+  - WaveSpawner
+  - Waypoint
+  - LifeScavenger
   layers:
   - Default
   - TransparentFX

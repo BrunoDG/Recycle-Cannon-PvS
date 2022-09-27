@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
 public class PlayerControl : MonoBehaviour
@@ -15,6 +17,12 @@ public class PlayerControl : MonoBehaviour
 
     private float horizontalInput;
     private float verticalInput;
+    private bool pickItem = false;
+
+    [Header("Life counter")]
+    public int lives;
+
+    private List<GameObject> lifePanels = new List<GameObject>();
 
     [Header("Trash Collected")]
     [SerializeField] private int organicAmmo;
@@ -24,11 +32,23 @@ public class PlayerControl : MonoBehaviour
     private void Start()
     {
         _controller = GetComponent<CharacterController>();
+        lifePanels.AddRange(GameObject.FindGameObjectsWithTag("LifeScavenger"));
+        lives = lifePanels.Count();
     }
 
     private void Update()
     {
         Movement();
+    }
+
+    public void TakeDamage()
+    {
+        lives--;
+        Destroy(lifePanels[lives-1]);
+        if (lives == 0)
+        {
+            Die();
+        }
     }
 
     void Movement()
@@ -70,26 +90,64 @@ public class PlayerControl : MonoBehaviour
         _controller.Move(movementDirection * _playerSpeed * Time.deltaTime);
     }
 
-    public void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider other)
     {
-        switch (other.gameObject.tag)
+        if (other.gameObject.tag == "OrganicTrash" ||
+            other.gameObject.tag == "PlasticTrash" ||
+            other.gameObject.tag == "MetallicTrash" )
+        {
+            Debug.Log("Lixo pode ser coletado!");
+            pickItem = true;
+        }
+        else if (other.gameObject.tag == "OrganicContainer" ||
+                 other.gameObject.tag == "PlasticContainer" ||
+                 other.gameObject.tag == "MetallicContainer" )
+        {
+            Debug.Log("Pode depositar para munição!");
+        }
+    }
+
+    void OnTriggerStay(Collider other)
+    {
+        
+        PickAndDeposit(other.gameObject.tag, "Pick");
+        other.gameObject.SetActive(false);
+        Destroy(other.gameObject);
+    }
+
+    void PickAndDeposit(string type, string action)
+    {
+        switch (type)
         {
             case "OrganicTrash":
-                Debug.Log("Organic Trash Collected");
-                organicAmmo++;
+                if (pickItem)
+                {
+                    Debug.Log("Organic Trash Collected");
+                    organicAmmo++;
+                } else
+                {
+                    Debug.Log("Organic Trash Fueled on the Right Place");
+                    
+                    organicAmmo = 0;
+                }
                 break;
             case "PlasticTrash":
-                Debug.Log("Plastic Trash Collected");
-                plasticAmmo++;
+                if (pickItem)
+                {
+                    Debug.Log("Plastic Trash Collected");
+                    plasticAmmo++;
+                }
                 break;
             case "MetallicTrash":
                 Debug.Log("Metallic Trash Collected");
                 metalAmmo++;
                 break;
-            default:
-                break;
         }
-        other.gameObject.SetActive(false);
-        Destroy(other.gameObject);
+    }
+
+    void Die()
+    {
+        Destroy(gameObject);
+        GameManager.GameOver(0);
     }
 }
